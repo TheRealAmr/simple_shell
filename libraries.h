@@ -11,11 +11,11 @@
 
 /* Prototypes used for Shell */
 
-void working_directory();
+void working_directory(void);
 void readline(char *incoming, char **args);
 void shell_getline(char *cmmd, char *par[]);
 void shell_execute(char *cmd, char *command,
-    char **args, char **envp, char **av);
+char **args, char **envp, char **av);
 
 /* Variable Limitations */
 

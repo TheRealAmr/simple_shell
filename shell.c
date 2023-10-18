@@ -14,19 +14,19 @@ int main(int ac, char **av)
 	int i;
 	int pid;
 	/*char cmd[MAX_LENGTH_OF_CMD];*/
-    char command[MAX_LENGTH_OF_CMD];
+	char command[MAX_LENGTH_OF_CMD];
 	char *args[MAX_LENGTH_OF_PARAMETERS];
 	/*char *envp[] = { "PATH=/bin", NULL };*/
 	(void)ac;
-    (void)av;
+	(void)av;
 
 	while (1)
 	{
 		working_directory();
-        readline(command, args);
-        /*printf("%s\n", command);*/
+	readline(command, args);
+	/*printf("%s\n", command);*/
 		/*shell_getline(command, args);*/
-        if (strcmp(args[0], "exit") == 0)
+	if (strcmp(args[0], "exit") == 0)
 		{
 			for (i = 0; args[i] != NULL; i++)
 				free(args[i]);
@@ -39,8 +39,8 @@ int main(int ac, char **av)
 			/*shell_execute(cmd, command, args, envp, av);*/
 
 		/* Memory Leakage precautions */
-        for (i = 0; args[i] != NULL; i++)
-            free(args[i]);
+	for (i = 0; args[i] != NULL; i++)
+		free(args[i]);
 	}
 	return (0);
 }

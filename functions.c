@@ -25,9 +25,9 @@ void readline(char *incoming, char **args)
 
 	args[k] = NULL;
 
-    if (k > 0)
+	if (k > 0)
 	{
-        strcpy(incoming, args[0]);
+	strcpy(incoming, args[0]);
 	}
 
 	free(inc);
@@ -64,7 +64,7 @@ void shell_getline(char *cmmd, char *par[])
 
 	free(line);
 	for (z = 0; z < j; z++)
-        free(par[z]);
+	free(par[z]);
 }
 
 /**
@@ -85,7 +85,7 @@ void shell_execute(char *cmd, char *command,
 	exit(EXIT_FAILURE);
 }
 
-void working_directory()
+void working_directory(void)
 {
 	size_t size = BUFFER_SIZE;
 	char *buff = (char *)malloc(size);
