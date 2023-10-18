@@ -1,5 +1,16 @@
 #include "libraries.h"
 
+void envcmd(char *command)
+{
+	int x = 0;
+
+	if (strcmp(command, "env") == 0)
+	{
+		for (x = 0; environ[x] != NULL; x++)
+			printf("%s\n", environ[x]);
+	}
+}
+
 /**
  * readline - gets the input using getline() and separates
  *            it using the strtok() function then returns
