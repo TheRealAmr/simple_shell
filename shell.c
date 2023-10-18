@@ -2,22 +2,42 @@
 
 /**
  * main - shell copy program
+ *
  * @ac: number of arguments
  * @av: arguments passed to the program
- * @envp: environment variable for paths later
+ *
  * Return: 0
 */
-int main(int ac, char **av, char **envp)
+
+int main(int ac, char **av)
 {
-    (void)ac;
-    int j;
-    char command[], paras[];
+	int i;
+	int pid;
+	char cmd[MAX_LENGTH_OF_CMD];
+	char command[MAX_LENGTH_OF_CMD];
+	char *parameters[MAX_LENGTH_OF_PARAMETERS];
+	char *envp[] = { "PATH=/bin", NULL };
+	(void)ac;
 
-    while (1)
-    {
-        printf("$ ");
+	while (1)
+	{
+		printf("$ ");
+		__shell_getline(command, parameters);
+		if (strcmp(command, "exit") == 0)
+		{
+			for (i = 0; parameters[i] != NULL; i++)
+				free(parameters[i]);
 
-    }
-
-    return (0);
+			break;
+		}
+		pid = fork();
+		if (pid != 0)
+			wait(NULL);
+		else
+			shell_execute(cmd, command, parameters, envp, av);
+		/* Memory Leakage precautions */
+		for (i = 0; parameters[i] != NULL; i++)
+			free(parameters[i]);
+	}
+	return (0);
 }
