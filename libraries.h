@@ -14,8 +14,8 @@
 #include "functions.c"
 
 /*void shell_exit(char *command, char *parameters[]);*/
-void shell_getline(char *cmd, char **par);
-void shell_execute(char *cmd, char *command,
+int tokenize_input(char *cmmd, char *par[]);
+void shellex(char *cmd, char *command,
 	char **parameters, char **envp, char **av);
 
 /* Variable Limitations */

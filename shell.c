@@ -22,7 +22,7 @@ int main(int ac, char **av)
 	while (1)
 	{
 		printf("$ ");
-		shell_getline(command, parameters);
+		tokenize_input(command, parameters);
 		if (strcmp(command, "exit") == 0)
 		{
 			for (i = 0; parameters[i] != NULL; i++)
@@ -34,7 +34,7 @@ int main(int ac, char **av)
 		if (pid != 0)
 			wait(NULL);
 		else
-			shell_execute(cmd, command, parameters, envp, av);
+			shellex(cmd, command, parameters, envp, av);
 		/* Memory Leakage precautions */
 		for (i = 0; parameters[i] != NULL; i++)
 			free(parameters[i]);

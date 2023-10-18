@@ -14,13 +14,14 @@
 /* Cancelled the use of this function because I cannot use break */
 
 /**
- * shell_getline - takes the command from the user using getline()
- * @cmd: searching for the path of the command itself
+ * tokenize_input - takes the command from the user using getline()
+ * @cmmd: searching for the path of the command itself
  * @par: arguments of the command such as -l or -lt
+ * Return: 0
 */
-void shell_getline(char *cmd, char **par)
+int tokenize_input(char *cmmd, char *par[])
 {
-	int i = 0;
+	int j;
 	char *line = NULL;
 	char *token = strtok(line, " \n");
 
@@ -29,26 +30,37 @@ void shell_getline(char *cmd, char **par)
 
 	if (read == -1)
 	{
-	perror("getline");
-	exit(1);
+		perror("getline");
+		exit(1);
 	}
 
+	j = 0;
 	while (token != NULL)
 	{
-	par[i] = strdup(token);
-	token = strtok(NULL, " \n");
-	i++;
+		par[j] = strdup(token);
+		token = strtok(NULL, " \n");
+		j++;
 	}
 
-	par[i] = NULL;
+	par[j] = NULL;
 
-	if (i > 0)
-	strcpy(cmd, par[0]);
+	if (j > 0)
+		strcpy(cmmd, par[j]);
 
 	free(line);
+
+	return (0);
 }
 
-void shell_execute(char *cmd, char *command,
+/**
+ * shellex - executes the program
+ * @cmd: path
+ * @command: the command itself
+ * @parameters: the command arguments/args
+ * @envp: the evironment of the command
+ * @av: av[0] would only be used in case of an error
+*/
+void shellex(char *cmd, char *command,
 	char **parameters, char **envp, char **av)
 {
 	strcpy(cmd, "/bin/");
