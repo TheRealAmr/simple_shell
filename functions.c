@@ -1,5 +1,14 @@
 #include "libraries.h"
 
+/**
+ * readline - gets the input using getline() and separates
+ *            it using the strtok() function then returns
+ *
+ * @incoming: command
+ * @args: arguments/parameters of the command
+ *
+ * Return: command & arguments & 0 on failure
+*/
 void readline(char *incoming, char **args)
 {
 	int k = 0;
@@ -33,48 +42,6 @@ void readline(char *incoming, char **args)
 	free(inc);
 }
 
-void shell_getline(char *cmmd, char *par[])
-{
-	int j;
-	int z;
-	char *line = NULL;
-	char *token = NULL;
-	size_t line_length = 0;
-	ssize_t read = getline(&line, &line_length, stdin);
-
-	if (read == -1)
-	{
-		perror("getline");
-		free(line);
-		exit(1);
-	}
-	token = strtok(line, " \n");
-	j = 0;
-	while (token != NULL)
-	{
-		par[j] = strdup(token);
-		token = strtok(NULL, " \n");
-		j++;
-	}
-
-	par[j] = NULL;
-
-	if (j > 0)
-		strcpy(cmmd, par[j]);
-
-	free(line);
-	for (z = 0; z < j; z++)
-	free(par[z]);
-}
-
-/**
- * shellex - executes the program
- * @cmd: path
- * @command: the command itself
- * @args: the command arguments/args
- * @envp: the evironment of the command
- * @av: av[0] would only be used in case of an error
-*/
 void shell_execute(char *cmd, char *command,
 	char **args, char **envp, char **av)
 {
@@ -85,6 +52,12 @@ void shell_execute(char *cmd, char *command,
 	exit(EXIT_FAILURE);
 }
 
+/**
+ * working_directory - prints the cisfun format followed by
+ *                     the cwd and then the $ sign
+ *
+ * Return: void
+*/
 void working_directory(void)
 {
 	size_t size = BUFFER_SIZE;
