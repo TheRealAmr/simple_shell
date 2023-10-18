@@ -29,7 +29,7 @@ int main(int ac, char **av)
 				free(args[i]);
 			break;
 		}
-        envcmd(command);
+	envcmd(command);
 		pid = fork();
 		if (pid != 0)
 			wait(NULL);
