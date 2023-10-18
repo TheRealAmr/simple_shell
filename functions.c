@@ -51,9 +51,9 @@ void shell_getline(char *cmd, char **par)
 void shell_execute(char *cmd, char *command,
 	char **parameters, char **envp, char **av)
 {
-    strcpy(cmd, "/bin/");
-    strcat(cmd, command);
-    execve(cmd, parameters, envp);
-    perror(av[0]);
-    exit(1);
+	strcpy(cmd, "/bin/");
+	strcat(cmd, command);
+	execve(cmd, parameters, envp);
+	perror(av[0]);
+	exit(1);
 }
