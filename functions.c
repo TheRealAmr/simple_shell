@@ -1,17 +1,10 @@
 #include "libraries.h"
 
-/*void shell_exit(char *command, char *parameters[])*/
-/*{*/
-/*    int i;*/
-
-/*    if (strcmp(command, "exit") == 0)*/
-/*    {*/
-/*        for (i = 0; parameters[i] != NULL; i++)*/
-/*            free(parameters[i]);*/
-/*        //break;*/
-/*    }*/
-/*}*/
-/* Cancelled the use of this function because I cannot use break */
+/**
+ * shell_getline - takes the command from the user using getline()
+ * @cmd: searching for the path of the command itself
+ * @par: arguments of the command such as -l or -lt
+*/
 
 void shell_getline(char *cmd, char **par)
 {
@@ -42,3 +35,16 @@ void shell_getline(char *cmd, char **par)
 
 	free(line);
 }
+
+/*void shell_exit(char *command, char *parameters[])*/
+/*{*/
+/*    int i;*/
+
+/*    if (strcmp(command, "exit") == 0)*/
+/*    {*/
+/*        for (i = 0; parameters[i] != NULL; i++)*/
+/*            free(parameters[i]);*/
+/*        //break;*/
+/*    }*/
+/*}*/
+/* Cancelled the use of this function because I cannot use break */
