@@ -22,7 +22,7 @@ int main(int ac, char **av)
 	while (1)
 	{
 		printf("$ ");
-		__shell_getline(command, parameters);
+		shell_getline(command, parameters);
 		if (strcmp(command, "exit") == 0)
 		{
 			for (i = 0; parameters[i] != NULL; i++)
