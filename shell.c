@@ -13,31 +13,34 @@ int main(int ac, char **av)
 {
 	int i;
 	int pid;
-	char cmd[MAX_LENGTH_OF_CMD];
-	char command[MAX_LENGTH_OF_CMD];
-	char *parameters[MAX_LENGTH_OF_PARAMETERS];
-	char *envp[] = { "PATH=/bin", NULL };
+	/*char cmd[MAX_LENGTH_OF_CMD];*/
+    char command[MAX_LENGTH_OF_CMD];
+	char *args[MAX_LENGTH_OF_PARAMETERS];
+	/*char *envp[] = { "PATH=/bin", NULL };*/
 	(void)ac;
+    (void)av;
 
 	while (1)
 	{
-		printf("$ ");
-		tokenize_input(command, parameters);
-		if (strcmp(command, "exit") == 0)
+		working_directory();
+        readline(command, args);
+        /*printf("%s\n", command);*/
+		/*shell_getline(command, args);*/
+        if (strcmp(args[0], "exit") == 0)
 		{
-			for (i = 0; parameters[i] != NULL; i++)
-				free(parameters[i]);
-
+			for (i = 0; args[i] != NULL; i++)
+				free(args[i]);
 			break;
 		}
 		pid = fork();
 		if (pid != 0)
 			wait(NULL);
-		else
-			shellex(cmd, command, parameters, envp, av);
+		/*else*/
+			/*shell_execute(cmd, command, args, envp, av);*/
+
 		/* Memory Leakage precautions */
-		for (i = 0; parameters[i] != NULL; i++)
-			free(parameters[i]);
+        for (i = 0; args[i] != NULL; i++)
+            free(args[i]);
 	}
 	return (0);
 }

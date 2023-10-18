@@ -11,15 +11,15 @@
 
 /* Prototypes used for Shell */
 
-#include "functions.c"
-
-/*void shell_exit(char *command, char *parameters[]);*/
-int tokenize_input(char *cmmd, char *par[]);
-void shellex(char *cmd, char *command,
-	char **parameters, char **envp, char **av);
+void working_directory();
+void readline(char *incoming, char **args);
+void shell_getline(char *cmmd, char *par[]);
+void shell_execute(char *cmd, char *command,
+    char **args, char **envp, char **av);
 
 /* Variable Limitations */
 
+#define BUFFER_SIZE 1024
 #define MAX_LENGTH_OF_CMD 1024
 #define MAX_LENGTH_OF_PARAMETERS 64
 

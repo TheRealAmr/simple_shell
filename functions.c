@@ -1,39 +1,54 @@
 #include "libraries.h"
 
-/*void shell_exit(char *command, char *parameters[])*/
-/*{*/
-/*    int i;*/
+void readline(char *incoming, char **args)
+{
+	int k = 0;
+	char *token;
+	char *inc = NULL;
+	size_t length = 0;
+	ssize_t input = getline(&inc, &length, stdin);
 
-/*    if (strcmp(command, "exit") == 0)*/
-/*    {*/
-/*        for (i = 0; parameters[i] != NULL; i++)*/
-/*            free(parameters[i]);*/
-/*        //break;*/
-/*    }*/
-/*}*/
-/* Cancelled the use of this function because I cannot use break */
+	if (input == -1)
+	{
+		perror("Error");
+		free(inc);
+		exit(EXIT_FAILURE);
+	}
 
-/**
- * tokenize_input - takes the command from the user using getline()
- * @cmmd: searching for the path of the command itself
- * @par: arguments of the command such as -l or -lt
- * Return: 0
-*/
-int tokenize_input(char *cmmd, char *par[])
+	token = strtok(inc, " \n");
+	while (token != NULL)
+	{
+		args[k] = strdup(token);
+		token = strtok(NULL, " \n");
+		k++;
+	}
+
+	args[k] = NULL;
+
+    if (k > 0)
+	{
+        strcpy(incoming, args[0]);
+	}
+
+	free(inc);
+}
+
+void shell_getline(char *cmmd, char *par[])
 {
 	int j;
+	int z;
 	char *line = NULL;
-	char *token = strtok(line, " \n");
-
+	char *token = NULL;
 	size_t line_length = 0;
 	ssize_t read = getline(&line, &line_length, stdin);
 
 	if (read == -1)
 	{
 		perror("getline");
+		free(line);
 		exit(1);
 	}
-
+	token = strtok(line, " \n");
 	j = 0;
 	while (token != NULL)
 	{
@@ -48,24 +63,52 @@ int tokenize_input(char *cmmd, char *par[])
 		strcpy(cmmd, par[j]);
 
 	free(line);
-
-	return (0);
+	for (z = 0; z < j; z++)
+        free(par[z]);
 }
 
 /**
  * shellex - executes the program
  * @cmd: path
  * @command: the command itself
- * @parameters: the command arguments/args
+ * @args: the command arguments/args
  * @envp: the evironment of the command
  * @av: av[0] would only be used in case of an error
 */
-void shellex(char *cmd, char *command,
-	char **parameters, char **envp, char **av)
+void shell_execute(char *cmd, char *command,
+	char **args, char **envp, char **av)
 {
 	strcpy(cmd, "/bin/");
 	strcat(cmd, command);
-	execve(cmd, parameters, envp);
+	execve(cmd, args, envp);
 	perror(av[0]);
-	exit(1);
+	exit(EXIT_FAILURE);
+}
+
+void working_directory()
+{
+	size_t size = BUFFER_SIZE;
+	char *buff = (char *)malloc(size);
+
+	if (buff == NULL)
+	{
+		perror("Error");
+		free(buff);
+		exit(EXIT_FAILURE);
+	}
+
+	while (getcwd(buff, size) == NULL)
+	{
+		size = size * 2;
+		buff = (char *)realloc(buff, size);
+		if (buff == NULL)
+		{
+			perror("Error");
+			free(buff);
+			exit(EXIT_FAILURE);
+		}
+	}
+
+	printf("#cisfun%s$ ", buff);
+	free(buff);
 }
