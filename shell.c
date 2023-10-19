@@ -28,7 +28,11 @@ int main(int ac, char **av, char **envp)
 				free(args[i]);
 			break;
 		}
-	envcmd(command);
+		if (strcmp(command, "env") == 0)
+		{
+			envcmd();
+			continue;
+		}
 		pid = fork();
 		if (pid != 0)
 			wait(NULL);

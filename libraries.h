@@ -12,7 +12,7 @@
 /* Prototypes used for Shell */
 
 void working_directory(void);
-void envcmd(char *command);
+void envcmd(void);
 void readline(char *incoming, char **args);
 void shell_execute(char *cmd, char *command,
 char **args, char **envp, char **av);

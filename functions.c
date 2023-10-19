@@ -2,20 +2,20 @@
 
 /***/
 
-void envcmd(char *command)
+void envcmd(void)
 {
 	int x = 0;
 
-	if (strcmp(command, "env") == 0)
+	while (environ[x] != NULL)
 	{
-		for (x = 0; environ[x] != NULL; x++)
-			printf("%s\n", environ[x]);
+		printf("%s\n", environ[x]);
+		x++;
 	}
 }
 
 /**
  * readline - gets the input using getline() and separates
- *            it using the strtok() function then returns
+ *			it using the strtok() function then returns
  *
  * @incoming: command
  * @args: arguments/parameters of the command
@@ -67,7 +67,7 @@ void shell_execute(char *cmd, char *command,
 
 /**
  * working_directory - prints the cisfun format followed by
- *                     the cwd and then the $ sign
+ *					 the cwd and then the $ sign
  *
  * Return: void
 */
