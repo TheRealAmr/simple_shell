@@ -9,14 +9,13 @@
  * Return: 0
 */
 
-int main(int ac, char **av)
+int main(int ac, char **av, char **envp)
 {
 	int i;
 	int pid;
 	char cmd[MAX_LENGTH_OF_CMD];
 	char command[MAX_LENGTH_OF_CMD];
 	char *args[MAX_LENGTH_OF_PARAMETERS];
-	char *envp[] = { "PATH=/bin", NULL };
 	(void)ac;
 
 	while (1)
