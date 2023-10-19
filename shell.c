@@ -5,6 +5,7 @@
  *
  * @ac: number of arguments
  * @av: arguments passed to the program
+ * @envp: enviro var
  *
  * Return: 0
 */
@@ -21,8 +22,9 @@ int main(int ac, char **av, char **envp)
 	while (1)
 	{
 		if (intermode)
-            working_directory();
-		
+		{
+			working_directory();
+		}
 		readline(command, args);
 
 		if (strcmp(command, "exit") == 0)
@@ -36,7 +38,7 @@ int main(int ac, char **av, char **envp)
 			{
 				free(args[i]);
 			}
-		    exit(exit_status);
+			exit(exit_status);
 		}
 
 		if (strcmp(command, "env") == 0)
@@ -44,12 +46,9 @@ int main(int ac, char **av, char **envp)
 			envcmd();
 			continue;
 		}
-
 		shell_execute(command, args, envp, av);
-
 		for (i = 0; args[i] != NULL; i++)
 			free(args[i]);
 	}
-
 	return (0);
 }
