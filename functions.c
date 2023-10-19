@@ -58,11 +58,26 @@ void readline(char *incoming, char **args)
 void shell_execute(char *cmd, char *command,
 	char **args, char **envp, char **av)
 {
+	int status;
+	if (!isatty(STDOUT_FILENO))
+	{
+        perror("stdout is not a tty");
+        exit(EXIT_FAILURE);
+    }
 	strcpy(cmd, "/bin/");
 	strcat(cmd, command);
-	execve(cmd, args, envp);
-	perror(av[0]);
-	exit(EXIT_FAILURE);
+	if (fork() == 0)
+	{
+        execve(cmd, args, envp);
+        fprintf(stderr, "%s: %s: %s\n", av[0], command, strerror(errno));
+        exit(2);
+    }
+	else
+	{
+        wait(&status);
+        if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+            exit(WEXITSTATUS(status));
+    }
 }
 
 /**
