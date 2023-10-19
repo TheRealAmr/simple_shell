@@ -1,5 +1,4 @@
 #include "libraries.h"
-#include <stdio.h>
 
 void envcmd(char *command)
 {
