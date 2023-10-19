@@ -1,6 +1,36 @@
 #include "libraries.h"
 
-/***/
+char *find_command_in_path(char *command)
+{
+    char *PATH = strdup(getenv("PATH"));
+    char *path = strtok(PATH, ":");
+    static char full_command[1024];
+
+    while (path != NULL)
+	{
+        DIR *dir = opendir(path);
+        struct dirent *entry;
+
+        if (dir)
+		{
+            while ((entry = readdir(dir)) != NULL)
+			{
+                if (strcmp(entry->d_name, command) == 0)
+				{
+                    snprintf(full_command, sizeof(full_command), "%s/%s", path, command);
+                    closedir(dir);
+                    free(PATH);
+                    return full_command;
+                }
+            }
+            closedir(dir);
+        }
+
+        path = strtok(NULL, ":");
+    }
+    free(PATH);
+    return NULL;
+}
 
 void envcmd(void)
 {
@@ -55,28 +85,45 @@ void readline(char *incoming, char **args)
 	free(inc);
 }
 
-void shell_execute(char *cmd, char *command,
-	char **args, char **envp, char **av)
+void shell_execute(char *command, char **args, char **envp, char **av)
 {
-	int status;
-	if (!isatty(STDOUT_FILENO))
-	{
+    int status;
+    char *full_path_command;
+
+    if (!isatty(STDOUT_FILENO))
+    {
         perror("stdout is not a tty");
         exit(EXIT_FAILURE);
     }
-	strcpy(cmd, "/bin/");
-	strcat(cmd, command);
-	if (fork() == 0)
-	{
-        execve(cmd, args, envp);
-        fprintf(stderr, "%s: %s: %s\n", av[0], command, strerror(errno));
-        exit(2);
+
+    if (strchr(command, '/'))
+    {
+        full_path_command = strdup(command);
     }
-	else
-	{
-        wait(&status);
-        if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-            exit(WEXITSTATUS(status));
+    else
+    {
+        full_path_command = find_command_in_path(command);
+    }
+
+    if (full_path_command)
+    {
+        if (fork() == 0)
+        {
+            execve(full_path_command, args, envp);
+            fprintf(stderr, "%s: %s: %s\n", av[0], command, strerror(errno));
+            exit(2);
+        }
+        else
+        {
+			wait(&status);
+            /*free(full_path_command);*/
+            if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+                exit(WEXITSTATUS(status));
+        }
+    }
+    else
+    {
+        fprintf(stderr, "%s: %s: command not found\n", av[0], command);
     }
 }
 
