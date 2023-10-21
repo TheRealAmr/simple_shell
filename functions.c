@@ -112,7 +112,7 @@ void readline(char *incoming, char **args)
  *
  * Return: void
 */
-void shell_execute(char *command, char **args, char **envp, char **av)
+int shell_execute(char *command, char **args, char **envp, char **av)
 {
 	int status;
 	char *full_path_command;
@@ -138,20 +138,33 @@ void shell_execute(char *command, char **args, char **envp, char **av)
 		{
 			execve(full_path_command, args, envp);
 			fprintf(stderr, "%s: %s: %s\n", av[0], command, strerror(errno));
-			exit(2);
+			if (strchr(command, '/'))
+			{
+				free(full_path_command);
+			}
+			/*exit(2);*/
+     		return (127);
 		}
 		else
 		{
 			wait(&status);
-			/*free(full_path_command);*/
+			if (strchr(command, '/'))
+			{
+				free(full_path_command);
+			}
 			if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-				exit(WEXITSTATUS(status));
+			{
+				return (WEXITSTATUS(status));
+			}
 		}
 	}
 	else
 	{
 		fprintf(stderr, "%s: %s: command not found\n", av[0], command);
+    	return (127);
 	}
+
+	return (0);
 }
 
 /**

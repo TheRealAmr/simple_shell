@@ -16,7 +16,7 @@
 void working_directory(void);
 void envcmd(void);
 void readline(char *incoming, char **args);
-void shell_execute(char *command, char **args,
+int shell_execute(char *command, char **args,
 char **envp, char **av);
 char *find_command_in_path(char *command);
 

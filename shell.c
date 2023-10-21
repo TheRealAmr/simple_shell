@@ -25,6 +25,7 @@ int main(int ac, char **av, char **envp)
 		{
 			working_directory();
 		}
+
 		readline(command, args);
 
 		if (strcmp(command, "exit") == 0)
@@ -44,11 +45,20 @@ int main(int ac, char **av, char **envp)
 		if (strcmp(command, "env") == 0)
 		{
 			envcmd();
+			for (i = 0; args[i] != NULL; i++)
+			{
+				free(args[i]);
+			}
 			continue;
 		}
-		shell_execute(command, args, envp, av);
+
+		exit_status = shell_execute(command, args, envp, av);
+
 		for (i = 0; args[i] != NULL; i++)
-			free(args[i]);
+		{
+		  free(args[i]);
+		}
 	}
-	return (0);
+
+	return (exit_status);
 }
