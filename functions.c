@@ -71,12 +71,16 @@ void readline(char *incoming, char **args)
 	char *comment_pos;
 	size_t length = 0;
 	ssize_t input = getline(&inc, &length, stdin);
+	int intermodethree = isatty(STDIN_FILENO);
 
 	if (input == -1)
 	{
-		perror("Error");
+		if (intermodethree)
+		{
+			perror("Error");
+		}
 		free(inc);
-		exit(EXIT_FAILURE);
+		exit(0);
 	}
 
 	comment_pos = strchr(inc, '#');
@@ -116,12 +120,6 @@ int shell_execute(char *command, char **args, char **envp, char **av)
 {
 	int status;
 	char *full_path_command;
-
-	if (!isatty(STDOUT_FILENO))
-	{
-		perror("stdout is not a tty");
-		exit(EXIT_FAILURE);
-	}
 
 	if (strchr(command, '/'))
 	{
@@ -177,12 +175,16 @@ void working_directory(void)
 {
 	size_t size = BUFFER_SIZE;
 	char *buff = (char *)malloc(size);
+	int intermodetwo = isatty(STDIN_FILENO);
 
 	if (buff == NULL)
 	{
-		perror("Error");
+		if (intermodetwo)
+		{
+			perror("Error");
+		}
 		free(buff);
-		exit(EXIT_FAILURE);
+		exit(0);
 	}
 
 	while (getcwd(buff, size) == NULL)
@@ -191,9 +193,12 @@ void working_directory(void)
 		buff = (char *)realloc(buff, size);
 		if (buff == NULL)
 		{
-			perror("Error");
+			if (intermodetwo)
+			{
+				perror("Error");
+			}
 			free(buff);
-			exit(EXIT_FAILURE);
+			exit(0);
 		}
 	}
 
